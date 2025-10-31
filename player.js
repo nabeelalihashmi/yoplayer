@@ -1,11 +1,31 @@
+const canvas = new fabric.Canvas('canvas', {
+    width: projectData.canvasWidth || 800,
+    height: projectData.canvasHeight || 600,
+    backgroundColor: projectData.canvasBackground || '#ffffff'
+});
+
+// Track running intervals/timeouts for cleanup
+let projectScriptTimers = [];
+let isCanvasFullscreen = false;
+
+// Override setTimeout/setInterval to track them
+const originalSetTimeout = window.setTimeout;
+const originalSetInterval = window.setInterval;
+
+window.setTimeoutTracked = function (...args) {
+    const id = originalSetTimeout.apply(window, args);
+    projectScriptTimers.push(id);
+    return id;
+};
+
+window.setIntervalTracked = function (...args) {
+    const id = originalSetInterval.apply(window, args);
+    projectScriptTimers.push(id);
+    return id;
+};
 document.addEventListener('DOMContentLoaded', () => {
     const projectData = JSON.parse(document.getElementById('projectData').textContent);
 
-    const canvas = new fabric.Canvas('canvas', {
-        width: projectData.canvasWidth || 800,
-        height: projectData.canvasHeight || 600,
-        backgroundColor: projectData.canvasBackground || '#ffffff'
-    });
 
     canvas.loadFromJSON(projectData.canvas, () => {
         canvas.renderAll();
@@ -118,4 +138,44 @@ function interpolateProperties(startFrame, endFrame, progress) {
     }
 
     return interpolated;
+}
+
+
+
+function getObjectById(id) {
+    if (!id) return null;
+    return canvas.getObjects().find(obj => obj.customId === id) || null;
+}
+
+// Helper function - get multiple objects by IDs
+function getObjectsByIds(ids) {
+    if (!Array.isArray(ids)) return [];
+    return ids.map(id => getObjectById(id)).filter(obj => obj !== null);
+}
+
+
+function objectHasClass(obj, className) {
+    return obj && obj.customClasses && obj.customClasses.includes(className);
+}
+
+// Get all objects with specific class
+function getObjectsByClass(className) {
+    if (!className) return [];
+    return canvas.getObjects().filter(obj => objectHasClass(obj, className));
+}
+
+// Get all objects with ANY of the classes
+function getObjectsByClasses(classNames) {
+    if (!Array.isArray(classNames)) return [];
+    return canvas.getObjects().filter(obj =>
+        obj.customClasses && obj.customClasses.some(c => classNames.includes(c))
+    );
+}
+
+// Get all objects with ALL of the classes
+function getObjectsByAllClasses(classNames) {
+    if (!Array.isArray(classNames)) return [];
+    return canvas.getObjects().filter(obj =>
+        obj.customClasses && classNames.every(c => obj.customClasses.includes(c))
+    );
 }
