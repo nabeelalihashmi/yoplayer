@@ -1,0 +1,168 @@
+/* YoDraw Player v1.0 - Complete Standalone Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow: hidden;
+}
+
+#canvas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+.canvas-wrapper {
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out;
+}
+
+canvas {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+}
+
+.loading-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #0066cc;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text {
+    margin-top: 20px;
+    color: #e0e0e0;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+    #canvas-container {
+        padding: 10px;
+    }
+    
+    body, html {
+        background-color: #ffffff;
+    }
+}
+
+@media (max-width: 600px) {
+    #canvas-container {
+        padding: 0;
+    }
+    
+    .canvas-wrapper {
+        box-shadow: none;
+        border-radius: 0;
+    }
+}
+
+.canvas-wrapper:-webkit-full-screen,
+.canvas-wrapper:-moz-full-screen,
+.canvas-wrapper:fullscreen {
+    width: 100%;
+    height: 100%;
+}
+
+#projectData {
+    display: none;
+}
+
+.upper-canvas {
+    cursor: default !important;
+}
+
+canvas {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Bootstrap Icons Font Face - Ensure icons load properly */
+@font-face {
+    font-display: block;
+    font-family: "bootstrap-icons";
+    src: url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/fonts/bootstrap-icons.woff2?8f0ed51677ab0a6f8e34e4d3ec6c4911") format("woff2"),
+         url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/fonts/bootstrap-icons.woff?8f0ed51677ab0a6f8e34e4d3ec6c4911") format("woff");
+}
+
+.bi::before,
+[class^="bi-"]::before,
+[class*=" bi-"]::before {
+    display: inline-block;
+    font-family: "bootstrap-icons" !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    vertical-align: -.125em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure text objects using icon fonts render correctly */
+.canvas-container .upper-canvas,
+.canvas-container canvas {
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+}
